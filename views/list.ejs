@@ -1,0 +1,54 @@
+<%- include("header") -%>
+
+  <div class="box" id="heading">
+    <h1> <%= listTitle %> </h1>
+  </div>
+
+  <!-- <div class="box">
+    <% for (let i=0; i<newListItems.length; i++) { %>
+      <div class="item">
+        <input type="checkbox">
+        <p><%=  newListItems[i].name  %></p>
+      </div>
+      <% } %> -->
+
+<!-- 10. We replaced the FOR loop with a forEach (it simplifies).
+
+          <array>.forEach(function(<singleArrayItem>) {
+            // use each singleArrayItem here
+            })
+-->
+
+  <div class="box">
+    <% newListItems.forEach(function(item) { %>
+<!--
+    13. Delete items from the database when they are checked on the to-do list.
+      13.1 We first wrap the below into a <form> </form>
+      13.2 Then we specify the new route (action) to be "/delete"
+      13.3 We add the new route (with app.post) inside app.js
+      -->
+      <form class="" action="/delete" method="post">
+        <div class="item">
+          <!-- 14. Unlikely the button below, the checkbox is not able to "submit" values when it is checked or unchecked
+            That's why we need to ad onChange="this.form.submit()" inside <input>.
+            We also must give the checkbox a name="" because it is what allows us to tap into the req.body (See 13.3)
+            You can now see { checkBox: 'on' } inside the console log.
+
+            14.2 We add value="<%= item._id %>" to the input to know what item has been checked. Note that we can use "item"
+            because we specified it above, at the beginning of this forEach function.
+            You can now see the id of the item being checked inside the console log.
+          -->
+          <input type="checkbox" onChange="this.form.submit()" name="checkBox" value="<%= item._id %>">
+          <p><%=  item.name  %></p>
+        </div>
+      </form>
+    <% }) %>
+
+
+      <form class="item" action="/" method="post">
+        <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
+        <button type="submit" name="list">+</button>
+      </form>
+  </div>
+
+<%- include("footer") -%>
