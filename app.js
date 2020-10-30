@@ -40,6 +40,16 @@ const item3 = new Item({
 // 6. We put the 3 default items into an array
 const defaultItems = [item1, item2, item3]
 
+// 15.2 We create a new schema for the new dynamic lists.
+// Below we declare that for every new list that we create, the list is going to have a (list) name and an array of item documents associated with it.
+const listSchema = {
+  name: 'String',
+  items: [itemsSchema]
+}
+
+// 16 We now need to create a new Mongoose model.
+const List = mongoose.model('List', listSchema)
+
 // 7. We store the array into the DB. NOTE: remember to comment out or you'll have duplicates.
 // Item.insertMany(defaultItems, function(err) {
 //   if (err) {
@@ -135,11 +145,30 @@ app.post('/delete', function (req, res) {
   res.redirect('/')
 })
 
-app.get('/work', function (req, res) {
-  res.render('list', {
-    listTitle: 'Work List',
-    newListItems: workItems
+// 15. We added a new dynamic Express route that takes the parameter from whatever value the user wants to use (:customListName)
+app.get('/:customListName', function (req, res) {
+// 15.1 We save req.params.customListName as a const.
+// console.log(req.params.customListName)
+  const customListName = req.params.customListName
+
+// 18. Check if the list name already exists, so we don't create duplicated lists with the same name.
+  List.findOne({name: customListName}, function(err,foundList){
+
+  }
+)
+
+
+  // 17. Now we're ready to create new list documents based of the new List model.
+  const list = List({
+    name: customListName,
+    items: defaultItems
   })
+  // 17.1 We need to save the list into the List collection.
+  // list.save()
+  })
+
+
+
 })
 
 app.get('/about', function (req, res) {
